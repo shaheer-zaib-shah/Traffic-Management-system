@@ -351,3 +351,23 @@ body{
     min-height: 100vh;
     background: transparent; /* Remove solid background */
 }
+.footer-links ul li {
+    height: auto;
+    display: block;
+    background-color: #0f3d3e;
+    border: 1px solid #17192a;
+    border-radius: 0.4rem;
+    padding: 10px 12px;
+}
+
+.footer-links ul li:hover {
+    background-color: #4fd1c5;
+}
+
+.footer-links ul li:hover a {
+    color: #041c1d;
+}
+
+.footer-links ul li a {
+    display: block;
+}
