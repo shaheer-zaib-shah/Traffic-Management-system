@@ -4,7 +4,7 @@ project(untitled1)
 set(CMAKE_CXX_STANDARD 20)
 
 # Include ASIO headers
-include_directories("C:/Users/hp/Downloads/asio-1.36.0/asio-1.36.0/include")
+include_directories("asio-1.36.0/asio-1.36.0/include")
 
 # Add source files
 add_executable(untitled1 SPF.cpp
