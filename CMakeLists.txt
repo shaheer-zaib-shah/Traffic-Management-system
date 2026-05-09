@@ -12,3 +12,4 @@ add_executable(untitled1 SPF.cpp
 
 # Link Windows socket libraries (Winsock + Mswsock)
 target_link_libraries(untitled1 PRIVATE ws2_32 mswsock)
+configure_file(routes.txt routes.txt COPYONLY)
