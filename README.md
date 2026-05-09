@@ -1,8 +1,10 @@
-# 🚦 Traffic Management System
+# Traffic Management System
 
 A C++ backend application that models a city road network as a weighted graph and computes optimal routes using **Dijkstra's Shortest Path algorithm**. It exposes a REST API via the **Crow framework** and is paired with a multi-page HTML/CSS frontend.
 
 ---
+
+> **Recommended IDE: CLion** — This project is designed to run with CLion using the bundled MinGW/GCC toolchain. Visual Studio / MSVC is not supported. VS Code can work but requires manual compiler and CMake setup.
 
 ## Features
 
