@@ -1,0 +1,42 @@
+# -----------------------------
+# CAR ROUTES
+# -----------------------------
+Islamabad 26_Number 12 car
+26_Number M2 40 car
+M2 Lahore 330 car
+
+Islamabad GT_Road 10 car
+GT_Road Gujranwala 150 car
+Gujranwala Lahore 80 car
+
+Rawalpindi Islamabad 15 car
+Rawalpindi Lahore 290 car
+
+
+# -----------------------------
+# BIKE ROUTES
+# -----------------------------
+Islamabad GT_Road 10 bike
+GT_Road Gujranwala 150 bike
+Gujranwala Lahore 80 bike
+
+
+# -----------------------------
+# TRAIN ROUTES
+# -----------------------------
+Islamabad Rawalpindi_Junction 20 train
+Rawalpindi_Junction Chaklala 15 train
+Chaklala Lalamusa 110 train
+Lalamusa Wazirabad 40 train
+Wazirabad Gujranwala 30 train
+Gujranwala Lahore 70 train
+
+
+# -----------------------------
+# PLANE ROUTES
+# -----------------------------
+Islamabad Islamabad_Airport 5 plane
+Islamabad_Airport Lahore_Airport 270 plane
+Lahore_Airport Karachi_Airport 1020 plane
+Karachi_Airport Islamabad_Airport 1100 plane
+

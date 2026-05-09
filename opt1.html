@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Planner Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="opt1.css">
+
+</head>
+
+<body>
+<div class="header">
+    <h1>Shortest Path Finder</h1>
+</div>
+
+<video autoplay muted loop class="bgVideo">
+    <source src="bgvideo.mp4" type="video/mp4">
+</video>
+
+<div class="container">
+    <div class="sidebar">
+        <ul>
+            <li>
+                <a href="opt1.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                    <span class="item-txt">Find Shortest Path</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt2.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    <span class="item-txt">Add New City</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt3.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    <span class="item-txt">Add New Route</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt4.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    <span class="item-txt">View All Cities</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt5.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-road"></i>
+                        </span>
+                    <span class="item-txt">View All Routes</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt6.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-ban"></i>
+                        </span>
+                    <span class="item-txt">Close a Road</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt7.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    <span class="item-txt">Reopen a Road</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt8.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </span>
+                    <span class="item-txt">View Closed Roads</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="form-wrapper">
+        <div id="findPath" class="form-container">
+            <h2 class="form-title">Find the Shortest Path</h2>
+            <form id="shortestPathForm">
+                <div class="form-group">
+                    <label for="startCity">Start City</label>
+                    <input type="text" id="startCity" name="startCity" placeholder="Enter starting city..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="endCity">Destination City</label>
+                    <input type="text" id="endCity" name="endCity" placeholder="Enter destination city..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicleType">Select Vehicle</label>
+                    <select id="vehicleType" name="vehicleType" required>
+                        <option value="Car">Car</option>
+                        <option value="Bike">Bike</option>
+                        <option value="Train">Train</option>
+                        <option value="Plane">Plane</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">Find Path</button>
+            </form>
+        </div>
+
+        <div class="result-card" id="resultCard">
+            <h2>Shortest Path Result</h2>
+            <div id="resultContent">
+                Click "Find Path" to view the shortest route.
+            </div>
+        </div>
+    </div>
+
+
+        <script>
+            document.getElementById('shortestPathForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const start = document.getElementById('startCity').value.trim();
+                const end = document.getElementById('endCity').value.trim();
+                const vehicleName = document.getElementById('vehicleType').value.trim();
+
+                // Convert vehicle string → int (matches your C++ enum)
+                let vehicleType = 0;
+                if (vehicleName === "Car") vehicleType = 0;
+                else if (vehicleName === "Bike") vehicleType = 1;
+                else if (vehicleName === "Train") vehicleType = 2;
+                else if (vehicleName === "Plane") vehicleType = 3;
+
+                const resultDiv = document.getElementById('resultContent');
+                resultDiv.innerHTML = "Calculating...";
+
+                try {
+                    const url = `http://localhost:18080/shortest/${encodeURIComponent(start)}/${encodeURIComponent(end)}/${vehicleType}`;
+
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error("Server error");
+
+                    const data = await response.json();
+
+                    if (!data.found) {
+                        resultDiv.innerHTML = `
+                <p style="color:red; font-weight:bold;">
+                    No route found from ${start} to ${end} using ${vehicleName}
+                </p>
+            `;
+                        return;
+                    }
+
+                    let html = `
+            <h3>Shortest Path</h3>
+            <p><strong>Path:</strong> ${data.path.join(' → ')}</p>
+            <p><strong>Total Distance:</strong> ${data.totalDistance.toFixed(2)} km</p>
+            <p><strong>Estimated Time:</strong> ${data.totalTime.toFixed(2)} hours</p>
+            <p><strong>Estimated Cost:</strong> PKR ${data.totalCost.toFixed(2)}</p>
+        `;
+
+                    resultDiv.innerHTML = html;
+                }
+                catch (err) {
+                    resultDiv.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+                }
+            });
+        </script>
+
+
+
+
+        <div id="pathResult"></div>
+    </div>
+
+</div>
+</div>
+<footer class="footer">
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h2>Shortest Path Finder</h2>
+            <p>
+                Shortest Path Finder is an intelligent route planning system designed to help users
+                identify the most efficient paths between cities using optimized graph algorithms.
+                The platform allows seamless city and route management, real-time road status updates,
+                and accurate distance-based calculations.
+            </p>
+        </div>
+
+        <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="opt1.html">Find Path</a></li>
+                <li><a href="opt2.html">Add City</a></li>
+                <li><a href="opt3.html">Add Route</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-contact">
+            <h3>Connect</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2025 Shortest Path Finder | All Rights Reserved</p>
+    </div>
+</footer>
+
+</body>
+
+</html>

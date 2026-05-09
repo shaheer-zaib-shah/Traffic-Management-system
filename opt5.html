@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View All Routes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="opt5.css">
+
+</head>
+
+<body>
+<div class="header">
+    <h1>Shortest Path Finder</h1>
+</div>
+
+<video autoplay muted loop class="bgVideo">
+    <source src="bgvideo.mp4" type="video/mp4">
+</video>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul>
+            <li>
+                <a href="opt1.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                    <span class="item-txt">Find Shortest Path</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt2.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    <span class="item-txt">Add New City</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt3.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    <span class="item-txt">Add New Route</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt4.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    <span class="item-txt">View All Cities</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt5.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-road"></i>
+                        </span>
+                    <span class="item-txt">View All Routes</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt6.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-ban"></i>
+                        </span>
+                    <span class="item-txt">Close a Road</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt7.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    <span class="item-txt">Reopen a Road</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt8.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </span>
+                    <span class="item-txt">View Closed Roads</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- View Routes Table -->
+    <div class="form-container fade-in" id="viewRoutes">
+        <h2 class="form-title">All Routes</h2>
+
+        <table id="routesTable">
+            <thead>
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Distance (km)</th>
+                <th>Vehicle</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Routes will dynamically load here -->
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    async function loadRoutes() {
+        try {
+            let res = await fetch("http://127.0.0.1:18080/routes");
+            let data = await res.json();
+
+            let tbody = document.querySelector("#routesTable tbody");
+            tbody.innerHTML = ""; // clear previous rows
+
+            Object.values(data).forEach(route => {
+                tbody.innerHTML += `
+                <tr>
+                    <td>${route.from}</td>
+                    <td>${route.to}</td>
+                    <td>${route.distance}</td>
+                    <td>${route.vehicle}</td>
+                    <td>${route.isOpen ? "Open" : "Closed"}</td>
+                </tr>
+            `;
+            });
+
+        } catch (err) {
+            console.error(err);
+            alert("Unable to load routes. Check if C++ server is running.");
+        }
+    }
+
+    // Initial load
+    loadRoutes();
+
+    // Optional: refresh every 5 seconds if you want dynamic updates
+    setInterval(loadRoutes, 5000);
+</script>
+
+<footer class="footer">
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h2>Shortest Path Finder</h2>
+            <p>
+                Shortest Path Finder is an intelligent route planning system designed to help users
+                identify the most efficient paths between cities using optimized graph algorithms.
+                The platform allows seamless city and route management, real-time road status updates,
+                and accurate distance-based calculations.
+            </p>
+        </div>
+
+        <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="opt1.html">Find Path</a></li>
+                <li><a href="opt2.html">Add City</a></li>
+                <li><a href="opt3.html">Add Route</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-contact">
+            <h3>Connect</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2025 Shortest Path Finder | All Rights Reserved</p>
+    </div>
+</footer>
+
+</body>
+</html>

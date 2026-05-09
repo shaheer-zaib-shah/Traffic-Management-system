@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Planner Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="opt6.css">
+
+</head>
+
+<body>
+<div class="header">
+    <h1>Shortest Path Finder</h1>
+</div>
+
+<video autoplay muted loop class="bgVideo">
+    <source src="bgvideo.mp4" type="video/mp4">
+</video>
+
+<div class="container">
+    <div class="sidebar">
+        <ul>
+            <li>
+                <a href="opt1.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                    <span class="item-txt">Find Shortest Path</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt2.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    <span class="item-txt">Add New City</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt3.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    <span class="item-txt">Add New Route</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt4.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </span>
+                    <span class="item-txt">View All Cities</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt5.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-road"></i>
+                        </span>
+                    <span class="item-txt">View All Routes</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt6.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-ban"></i>
+                        </span>
+                    <span class="item-txt">Close a Road</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt7.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    <span class="item-txt">Reopen a Road</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="opt8.html" class="nav-link">
+                        <span class="Item-icon">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </span>
+                    <span class="item-txt">View Closed Roads</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="form-wrapper">
+        <div id="findPath" class="form-container">
+        <h2 class="form-title">Close a Road</h2>
+
+        <form id="closeRoadForm">
+            <div class="form-group">
+                <label for="city1">Enter First City</label>
+                <input type="text" id="city1" placeholder="e.g., GT_Road">
+            </div>
+            <div class="form-group">
+                <label for="city2">Enter Second City</label>
+                <input type="text" id="city2" placeholder="e.g., Gujranwala">
+            </div>
+            <button type="submit" class="btn-submit">Close Road</button>
+        </form>
+
+        <p id="closeRoadMsg" class="form-message"></p>
+
+    </div>
+
+
+
+</div>
+</div>
+
+
+<script>
+    document.getElementById("closeRoadForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        let city1 = document.getElementById("city1").value.trim();
+        let city2 = document.getElementById("city2").value.trim();
+        let msgBox = document.getElementById("closeRoadMsg");
+
+        if (city1 === "" || city2 === "") {
+            msgBox.textContent = "Please enter both city names.";
+            msgBox.style.color = "red";
+            return;
+        }
+
+        try {
+            let res = await fetch("http://127.0.0.1:18080/closeRoad", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ city1: city1, city2: city2 })
+            });
+
+            let data = await res.json();
+
+            if (data.status === "success") {
+                msgBox.style.color = "lightgreen";
+                msgBox.textContent = data.msg;
+            }
+            else if (data.status === "info") {
+                msgBox.style.color = "red";
+                msgBox.textContent = data.msg;
+            }
+            else {
+                msgBox.style.color = "red";
+                msgBox.textContent = data.msg;
+            }
+
+        } catch (err) {
+            msgBox.style.color = "red";
+            msgBox.textContent = "Server error. Check if C++ Crow server is running.";
+        }
+    });
+</script>
+<footer class="footer">
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h2>Shortest Path Finder</h2>
+            <p>
+                Shortest Path Finder is an intelligent route planning system designed to help users
+                identify the most efficient paths between cities using optimized graph algorithms.
+                The platform allows seamless city and route management, real-time road status updates,
+                and accurate distance-based calculations.
+            </p>
+        </div>
+
+        <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="opt1.html">Find Path</a></li>
+                <li><a href="opt2.html">Add City</a></li>
+                <li><a href="opt3.html">Add Route</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-contact">
+            <h3>Connect</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2025 Shortest Path Finder | All Rights Reserved</p>
+    </div>
+</footer>
+</body>
+
+</html>
